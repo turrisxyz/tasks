@@ -21,18 +21,32 @@ License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 <template>
 	<div v-show="!loadedCompleted" class="loadmore reactive">
-		<span @click="loadCompletedTasks">
+		<Button
+			type="tertiary"
+			@click="loadCompletedTasks">
+			<template #icon>
+				<CloudDownload
+					:size="20"
+					decorative />
+			</template>
 			{{ t('tasks', 'Load all completed tasks.') }}
-		</span>
+		</Button>
 	</div>
 </template>
 
 <script>
 import { translate as t } from '@nextcloud/l10n'
+import Button from '@nextcloud/vue/dist/Components/Button'
+
+import CloudDownload from 'vue-material-design-icons/CloudDownload'
 
 import { mapActions } from 'vuex'
 
 export default {
+	components: {
+		Button,
+		CloudDownload,
+	},
 	props: {
 		calendar: {
 			type: Object,
@@ -59,20 +73,9 @@ export default {
 
 <style lang="scss" scoped>
 .loadmore {
-	text-align: center;
+	display: flex;
+	justify-content: center;
 	top: 20px;
 	position: relative;
-
-	span {
-		color: var(--color-text-lighter);
-		background-color: var(--color-main-background);
-		border-radius: var(--border-radius-pill);
-		padding: 10px;
-
-		&:hover {
-			cursor: pointer;
-			color: var(--color-main-text);
-		}
-	}
 }
 </style>

@@ -21,23 +21,39 @@ License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 <template>
 	<div class="loadmore reactive">
-		<span v-show="completedTasksCount" @click="openModal">
+		<Button
+			v-show="completedTasksCount"
+			type="tertiary"
+			@click="openModal">
+			<template #icon>
+				<Delete
+					:size="20"
+					decorative />
+			</template>
 			{{ t('tasks', 'Delete all completed tasks.') }}
-		</span>
+		</Button>
 		<Modal v-if="modalOpen"
 			:out-transition="true"
 			@close="closeModal">
-			<div class="emptycontent delete-completed">
-				<p class="icon-delete" />
+			<div class="delete-completed">
+				<Delete
+					:size="50"
+					decorative />
 				<div v-if="completedTasksCount">
 					<h3 class="delete-completed__header">
 						{{ n('tasks', 'This will delete {taskCount} completed task and its subtasks from calendar "{calendar}".', 'This will delete {taskCount} completed tasks and their subtasks from calendar "{calendar}".', initialCompletedRootTasksCount, {taskCount: initialCompletedRootTasksCount, calendar: calendar.displayName}, { sanitize: false, escape: false }) }}
 					</h3>
-					<button class="delete-completed__button icon-delete"
-						type="button"
+					<Button
+						type="primary"
+						class="delete-completed__button"
 						@click="deleteCompletedTasks">
+						<template #icon>
+							<Delete
+								:size="20"
+								decorative />
+						</template>
 						{{ t('tasks', 'Delete completed tasks.') }}
-					</button>
+					</Button>
 				</div>
 				<div v-else>
 					<h3 class="delete-completed__header">
@@ -63,12 +79,17 @@ License along with this library. If not, see <http://www.gnu.org/licenses/>.
 
 <script>
 import { translate as t, translatePlural as n } from '@nextcloud/l10n'
+import Button from '@nextcloud/vue/dist/Components/Button'
 import Modal from '@nextcloud/vue/dist/Components/Modal'
+
+import Delete from 'vue-material-design-icons/Delete'
 
 import { mapGetters, mapActions } from 'vuex'
 
 export default {
 	components: {
+		Button,
+		Delete,
 		Modal,
 	},
 	props: {
@@ -144,46 +165,28 @@ export default {
 
 <style lang="scss" scoped>
 .loadmore {
-	text-align: center;
+	display: flex;
+	justify-content: center;
 	top: 20px;
 	position: relative;
-
-	span {
-		color: var(--color-text-lighter);
-		background-color: var(--color-main-background);
-		border-radius: var(--border-radius-pill);
-		padding: 10px;
-
-		&:hover {
-			cursor: pointer;
-			color: var(--color-main-text);
-		}
-	}
 }
 
 .delete-completed {
 	margin: 50px;
 	width: auto;
 	min-width: 30vw;
-	&__button {
-		display: inline-block;
-		padding: 10px;
-		padding-left: 34px;
-		background-position: 10px center;
-		text-align: left;
-		margin: 0;
-		width: unset !important;
-		height: unset !important;
-		background-size: unset !important;
-	}
+
 	&__header {
 		padding-top: 20px;
 		max-width: 80%;
 		margin: 12px auto;
 	}
+	&__button {
+		margin: 0 auto;
+	}
 	&__progress {
 		width: 80%;
-		margin: auto;
+		margin: 20px auto;
 	}
 	&__tracker {
 		display: flex;
